@@ -14,7 +14,7 @@ struct AllPokemonView: View {
     var body: some View {
         NavigationStack {
             List(pokemonvm.pokemon, id: \.name) { pokemon in
-                Text(pokemon.name.uppercased())
+                Text(pokemon.name.capitalize)
             }
         }
         .task {

@@ -38,3 +38,11 @@ extension Optional {
         }
     }
 }
+
+extension String {
+    var capitalize: String {
+        let firstCharacter = self.prefix(1).capitalized
+        let remainingCharacters = self.dropFirst().lowercased()
+        return firstCharacter + remainingCharacters
+    }
+}

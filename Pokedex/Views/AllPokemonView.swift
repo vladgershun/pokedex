@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct AllPokemonView: View {
+    
     @StateObject private var pokemonvm = AllPokemonViewModel()
     
     var body: some View {
@@ -19,6 +20,7 @@ struct AllPokemonView: View {
         .task {
             await pokemonvm.fetchAllPokemon()
         }
+        .alert(isPresented: $pokemonvm.error.isPresent, error: pokemonvm.error) { }
     }
 }
 

@@ -11,11 +11,13 @@ import Foundation
 final class AllPokemonViewModel: ObservableObject {
     
     @Published var pokemon = [Pokemon]()
+    @Published var error: ErrorType?
     
     @MainActor
     func fetchAllPokemon() async {
+        // Skipping this error 
         guard let url = URL(string: "https://pokeapi.co/api/v2/pokemon/?offset=0&limit=2000") else {
-            print("Invalid URL")
+            self.error = ErrorType.badConnection
             return
         }
         
@@ -24,10 +26,11 @@ final class AllPokemonViewModel: ObservableObject {
             let decodedResponse = try JSONDecoder().decode(AllPokemon.self, from: data)
             pokemon = decodedResponse.results
         } catch {
-            print("Invalid data")
+            self.error = ErrorType.notDecodable
         }
     }
-
 }
+
+
 
 

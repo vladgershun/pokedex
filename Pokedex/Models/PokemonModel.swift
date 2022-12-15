@@ -16,4 +16,25 @@ struct Pokemon: Codable {
     let url: String
 }
 
+enum ErrorType: LocalizedError {
+    case badConnection
+    case notDecodable
+    var errorDescription: String? {
+        switch self {
+        case .badConnection:
+            return "Bad Connection"
+        case .notDecodable:
+            return "Bad Data"
+        }
+    }
+}
 
+extension Optional {
+    var isPresent: Bool {
+        get { self != nil }
+        set {
+            precondition(newValue == false)
+            self = nil
+        }
+    }
+}

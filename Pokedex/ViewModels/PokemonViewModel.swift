@@ -1,5 +1,5 @@
 //
-//  AllPokemonViewModel.swift
+//  PokemonViewModel.swift
 //  Pokedex
 //
 //  Created by Vlad Gershun on 12/15/22.
@@ -7,15 +7,16 @@
 
 import Foundation
 
-final class AllPokemonViewModel: ObservableObject {
+final class PokemonViewModel: ObservableObject {
     
-    @Published var allPokemon = [Pokemon]()
+    @Published var pokemon = [Pokemon]()
     @Published var error: ErrorType?
+    @Published var pokemonName = ""
     
     @MainActor
     func fetchAllPokemon() async {
-        // Skipping this error 
-        guard let url = URL(string: "https://pokeapi.co/api/v2/pokemon/?offset=0&limit=2000") else {
+        // Skipping this error
+        guard let url = URL(string: "https://pokeapi.co/api/v2/pokemon/\(pokemonName)") else {
             self.error = ErrorType.badConnection
             return
         }
@@ -23,13 +24,9 @@ final class AllPokemonViewModel: ObservableObject {
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
             let decodedResponse = try JSONDecoder().decode(AllPokemon.self, from: data)
-            allPokemon = decodedResponse.results
+            pokemon = decodedResponse.results
         } catch {
             self.error = ErrorType.notDecodable
         }
     }
 }
-
-
-
-

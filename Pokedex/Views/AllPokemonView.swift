@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  AllPokemonView.swift
 //  Pokedex
 //
 //  Created by Vlad Gershun on 12/13/22.
@@ -13,8 +13,16 @@ struct AllPokemonView: View {
     
     var body: some View {
         NavigationStack {
-            List(pokemonvm.pokemon, id: \.name) { pokemon in
-                Text(pokemon.name.capitalize)
+            List(pokemonvm.allPokemon, id: \.name) { pokemon in
+                NavigationLink(destination: PokemonView()) {
+                    HStack {
+                        //Replace with async image of front defualt sprite
+                        Image("pokeball")
+                            .resizable()
+                            .frame(width: 20, height: 20)
+                        Text(pokemon.name.capitalize)
+                    }
+                }
             }
         }
         .task {

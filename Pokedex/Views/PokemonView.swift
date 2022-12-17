@@ -23,12 +23,12 @@ struct PokemonView: View {
             }
         }
         .task {
-            await pokemonDetailVM.getDetails()
+            await pokemonDetailVM.fetchPokemonDetails()
         }
         .alert(isPresented: $pokemonDetailVM.hasError.isPresent, error: pokemonDetailVM.hasError) {
             Button("Retry") {
                 Task {
-                    await pokemonDetailVM.getDetails()
+                    await pokemonDetailVM.fetchPokemonDetails()
                 }
             }
         }

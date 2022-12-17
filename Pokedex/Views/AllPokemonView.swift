@@ -9,20 +9,26 @@ import SwiftUI
 
 struct AllPokemonView: View {
     
-    @StateObject private var pokemonVM = AllPokemonViewModel()
+    @StateObject private var pokemonVM = AllPokemonViewModel(service: AllPokemonService())
     
     var body: some View {
         NavigationStack {
-            List(pokemonVM.allPokemon, id: \.name) { pokemon in
-                NavigationLink(destination: PokemonView()) {
-                    HStack {
-                        //Replace with async image of front defualt sprite
-                        Image("pokeball")
-                            .resizable()
-                            .frame(width: 20, height: 20)
-                        Text(pokemon.name.capitalize)
+            switch pokemonVM.state {
+            case .success(let allPokemon):
+                List(allPokemon, id: \.name) { pokemon in
+                    NavigationLink(destination: PokemonView()) {
+                        HStack {
+                            Image("pokeball")
+                                .resizable()
+                                .frame(width: 20, height: 20)
+                            Text(pokemon.name.capitalize)
+                        }
                     }
                 }
+            case .loading:
+                ProgressView()
+            default:
+                EmptyView()
             }
         }
         .task {

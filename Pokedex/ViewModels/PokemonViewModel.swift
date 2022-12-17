@@ -9,7 +9,7 @@ import Foundation
 
 struct PokemonService {
     
-    func fetchAllPokemon(_ pokemonName: String) async throws -> PokemonDetails {
+    func fetchPokemonDetails(_ pokemonName: String) async throws -> PokemonDetails {
         
         guard let url = URL(string: "https://pokeapi.co/api/v2/pokemon/\(pokemonName)") else {
             throw ErrorType.badConnection
@@ -47,13 +47,13 @@ final class PokemonViewModel: ObservableObject {
         self.pokemonName = pokemonName
     }
     
-    func getDetails() async {
+    func fetchPokemonDetails() async {
         
         self.state = .loading
         self.hasError = nil
 
         do {
-            let pokemonDetails = try await service.fetchAllPokemon(pokemonName)
+            let pokemonDetails = try await service.fetchPokemonDetails(pokemonName)
             self.state = .success(data: pokemonDetails)
         } catch {
             self.state = .failed(error: ErrorType.notDecodable)

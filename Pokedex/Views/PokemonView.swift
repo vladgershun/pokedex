@@ -8,8 +8,23 @@
 import SwiftUI
 
 struct PokemonView: View {
+    
+    @StateObject private var pokemonDetailVM = PokemonViewModel(service: PokemonService())
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            switch pokemonDetailVM.state {
+            case .success(let pokemonDetails):
+                Text(pokemonDetails.name)
+            case .loading:
+                ProgressView()
+            default:
+                EmptyView()
+            }
+        }
+        .task {
+            await pokemonDetailVM.getDetails()
+        }
     }
 }
 

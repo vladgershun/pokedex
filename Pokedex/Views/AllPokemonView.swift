@@ -9,11 +9,11 @@ import SwiftUI
 
 struct AllPokemonView: View {
     
-    @StateObject private var pokemonvm = AllPokemonViewModel()
+    @StateObject private var pokemonVM = AllPokemonViewModel()
     
     var body: some View {
         NavigationStack {
-            List(pokemonvm.allPokemon, id: \.name) { pokemon in
+            List(pokemonVM.allPokemon, id: \.name) { pokemon in
                 NavigationLink(destination: PokemonView()) {
                     HStack {
                         //Replace with async image of front defualt sprite
@@ -26,9 +26,9 @@ struct AllPokemonView: View {
             }
         }
         .task {
-            await pokemonvm.fetchAllPokemon()
+            await pokemonVM.fetchAllPokemon()
         }
-        .alert(isPresented: $pokemonvm.error.isPresent, error: pokemonvm.error) { }
+        .alert(isPresented: $pokemonVM.error.isPresent, error: pokemonVM.error) { }
     }
 }
 

@@ -7,26 +7,55 @@
 
 import Foundation
 
-final class PokemonViewModel: ObservableObject {
+struct PokemonService {
     
-    @Published var pokemon = [Pokemon]()
-    @Published var error: ErrorType?
-    @Published var pokemonName = ""
-    
-    @MainActor
-    func fetchAllPokemon() async {
-        // Skipping this error
-        guard let url = URL(string: "https://pokeapi.co/api/v2/pokemon/\(pokemonName)") else {
-            self.error = ErrorType.badConnection
-            return
-        }
+    func fetchAllPokemon(_ pokemonName: String) async throws -> PokemonDetails {
         
+        guard let url = URL(string: "https://pokeapi.co/api/v2/pokemon/\(pokemonName)") else {
+            throw ErrorType.badConnection
+        }
+
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
-            let decodedResponse = try JSONDecoder().decode(AllPokemon.self, from: data)
-            pokemon = decodedResponse.results
+            let decodedResponse = try JSONDecoder().decode(PokemonDetails.self, from: data)
+            return decodedResponse
         } catch {
-            self.error = ErrorType.notDecodable
+            throw ErrorType.notDecodable
         }
+        
     }
 }
+
+@MainActor
+final class PokemonViewModel: ObservableObject {
+    
+    enum State {
+        case notAvailable
+        case loading
+        case success(data: PokemonDetails)
+        case failed(error: ErrorType)
+    }
+    
+    @Published var pokemonName: String
+    @Published private(set) var state: State = .notAvailable
+    
+    private let service: PokemonService
+    
+    init(service: PokemonService, pokemonName: String = "charizard") {
+        self.service = service
+        self.pokemonName = pokemonName
+    }
+    
+    func getDetails() async {
+        self.state = .loading
+
+        do {
+            let pokemonDetails = try await service.fetchAllPokemon(pokemonName)
+            self.state = .success(data: pokemonDetails)
+        } catch {
+            self.state = .failed(error: ErrorType.notDecodable)
+        }
+    }
+    
+}
+

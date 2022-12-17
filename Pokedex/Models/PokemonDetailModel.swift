@@ -8,16 +8,15 @@
 import Foundation
 
 struct PokemonDetails: Codable {
-        let abilities: [Ability]
-        let gameIndices: [GameIndex]
-        let height: Int
-        let id: Int
-        let locationAreaEncounters: String
-        let moves: [Move]
-        let name: String
-        let sprites: Sprites
-        let types: [TypeElement]
-        let weight: Int
+    let abilities: [Ability]
+    let game_indices: [GameIndex]
+    let height: Int
+    let id: Int
+    let moves: [Move]
+    let name: String
+    let sprites: Sprites
+    let types: [TypeElement]
+    let weight: Int
 }
 
 struct Info: Codable {
@@ -38,10 +37,10 @@ struct Move: Codable {
 }
 
 class Sprites: Codable {
-    let backDefault: String
-    let backShiny: String
-    let frontDefault: String
-    let frontShiny: String
+    let back_default: String
+    let back_shiny: String
+    let front_default: String
+    let front_shiny: String
 }
 
 struct TypeElement: Codable {

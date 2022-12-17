@@ -38,6 +38,7 @@ final class PokemonViewModel: ObservableObject {
     
     @Published var pokemonName: String
     @Published private(set) var state: State = .notAvailable
+    @Published var hasError: ErrorType?
     
     private let service: PokemonService
     
@@ -47,13 +48,16 @@ final class PokemonViewModel: ObservableObject {
     }
     
     func getDetails() async {
+        
         self.state = .loading
+        self.hasError = nil
 
         do {
             let pokemonDetails = try await service.fetchAllPokemon(pokemonName)
             self.state = .success(data: pokemonDetails)
         } catch {
             self.state = .failed(error: ErrorType.notDecodable)
+            self.hasError = ErrorType.notDecodable
         }
     }
     

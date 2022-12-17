@@ -12,7 +12,7 @@ struct PokemonView: View {
     @StateObject private var pokemonDetailVM = PokemonViewModel(service: PokemonService())
     
     var body: some View {
-        VStack {
+        ScrollView {
             switch pokemonDetailVM.state {
             case .success(let pokemonDetails):
                 Text(pokemonDetails.name)
@@ -24,6 +24,13 @@ struct PokemonView: View {
         }
         .task {
             await pokemonDetailVM.getDetails()
+        }
+        .alert(isPresented: $pokemonDetailVM.hasError.isPresent, error: pokemonDetailVM.hasError) {
+            Button("Retry") {
+                Task {
+                    await pokemonDetailVM.getDetails()
+                }
+            }
         }
     }
 }

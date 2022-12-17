@@ -10,13 +10,13 @@ import Foundation
 final class AllPokemonViewModel: ObservableObject {
     
     @Published var allPokemon = [Pokemon]()
-    @Published var error: ErrorType?
+    @Published var hasError: ErrorType?
     
     @MainActor
     func fetchAllPokemon() async {
         // Skipping this error 
         guard let url = URL(string: "https://pokeapi.co/api/v2/pokemon/?offset=0&limit=2000") else {
-            self.error = ErrorType.badConnection
+            self.hasError = ErrorType.badConnection
             return
         }
         
@@ -25,7 +25,7 @@ final class AllPokemonViewModel: ObservableObject {
             let decodedResponse = try JSONDecoder().decode(AllPokemon.self, from: data)
             allPokemon = decodedResponse.results
         } catch {
-            self.error = ErrorType.notDecodable
+            self.hasError = ErrorType.notDecodable
         }
     }
 }

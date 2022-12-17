@@ -28,7 +28,7 @@ struct AllPokemonView: View {
         .task {
             await pokemonVM.fetchAllPokemon()
         }
-        .alert(isPresented: $pokemonVM.error.isPresent, error: pokemonVM.error) { }
+        .alert(isPresented: $pokemonVM.hasError.isPresent, error: pokemonVM.hasError) { }
     }
 }
 

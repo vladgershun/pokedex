@@ -8,7 +8,6 @@
 import Foundation
 
 struct PokemonDetails: Codable {
-    let abilities: [Ability]
     let game_indices: [GameIndex]
     let height: Int
     let id: Int
@@ -22,10 +21,6 @@ struct PokemonDetails: Codable {
 struct Info: Codable, Hashable {
     let name: String
     let url: String
-}
-
-struct Ability: Codable {
-    let ability: Info
 }
 
 struct GameIndex: Codable {

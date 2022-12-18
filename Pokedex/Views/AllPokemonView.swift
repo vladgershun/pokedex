@@ -16,7 +16,7 @@ struct AllPokemonView: View {
             switch pokemonVM.state {
             case .success(let allPokemon):
                 List(allPokemon, id: \.name) { pokemon in
-                    NavigationLink(destination: PokemonView()) {
+                    NavigationLink(destination: PokemonView(pokemonName: pokemon.name)) {
                         HStack {
                             Image("pokeball")
                                 .resizable()
@@ -25,6 +25,7 @@ struct AllPokemonView: View {
                         }
                     }
                 }
+                .navigationTitle("Pokedex")
             case .loading:
                 ProgressView()
             default:

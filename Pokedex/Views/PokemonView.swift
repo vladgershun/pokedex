@@ -9,6 +9,7 @@ import SwiftUI
 
 struct PokemonView: View {
     
+    var pokemonName: String
     @StateObject private var pokemonDetailVM = PokemonViewModel(service: PokemonService())
     
     var body: some View {
@@ -16,7 +17,6 @@ struct PokemonView: View {
             switch pokemonDetailVM.state {
             case .success(let pokemonDetails):
                 List {
-
                     AsyncImage(url: URL(string: pokemonDetails.sprites.front_default), scale: 1) { image in
                         image
                             .resizable()
@@ -48,6 +48,18 @@ struct PokemonView: View {
                                         .resizable()
                                         .frame(width: 20, height: 20)
                                     Text(element.type.name.uppercased())
+                                        .font(.headline)
+                                        .padding()
+                                }
+                            }
+                        }
+                    }
+                    
+                    Section(header: Text("Game Versions")) {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack {
+                                ForEach(pokemonDetails.game_indices, id: \.version) { version in
+                                    Text(version.version.name.uppercased())
                                         .font(.headline)
                                         .padding()
                                 }
@@ -109,17 +121,10 @@ struct PokemonView: View {
                             }
                         }
                     }
-                    
-                    
- 
-                    
-                    
-      
                 }
                 .navigationTitle(pokemonDetails.name.uppercased())
                 .navigationBarTitleDisplayMode(.inline)
 
-                
             case .loading:
                 ProgressView()
             default:
@@ -127,6 +132,7 @@ struct PokemonView: View {
             }
         }
         .task {
+            pokemonDetailVM.pokemonName = self.pokemonName
             await pokemonDetailVM.fetchPokemonDetails()
         }
         .alert(isPresented: $pokemonDetailVM.hasError.isPresent, error: pokemonDetailVM.hasError) {
@@ -139,8 +145,3 @@ struct PokemonView: View {
     }
 }
 
-struct PokemonView_Previews: PreviewProvider {
-    static var previews: some View {
-        PokemonView()
-    }
-}

@@ -42,7 +42,7 @@ final class PokemonViewModel: ObservableObject {
     
     private let service: PokemonService
     
-    init(service: PokemonService, pokemonName: String = "charizard") {
+    init(service: PokemonService, pokemonName: String = "torterra") {
         self.service = service
         self.pokemonName = pokemonName
     }

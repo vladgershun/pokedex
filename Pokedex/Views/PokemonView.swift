@@ -44,7 +44,22 @@ struct PokemonView: View {
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack {
                                 ForEach(pokemonDetails.types, id: \.type) { element in
+                                    Image(element.type.name)
+                                        .resizable()
+                                        .frame(width: 20, height: 20)
                                     Text(element.type.name.uppercased())
+                                        .font(.headline)
+                                        .padding()
+                                }
+                            }
+                        }
+                    }
+                    
+                    Section(header: Text("Moves")) {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack {
+                                ForEach(pokemonDetails.moves, id: \.move) { move in
+                                    Text(move.move.name.uppercased())
                                         .font(.headline)
                                         .padding()
                                 }

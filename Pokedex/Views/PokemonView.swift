@@ -13,19 +13,19 @@ struct PokemonView: View {
     @StateObject private var pokemonDetailVM = PokemonViewModel(service: PokemonService())
     
     var body: some View {
-        ZStack {
+        VStack {
             switch pokemonDetailVM.state {
             case .success(let pokemonDetails):
+                AsyncImage(url: URL(string: pokemonDetails.sprites.front_default), scale: 1) { image in
+                    image
+                        .resizable()
+                        .scaledToFit()
+                } placeholder: {
+                    ProgressView()
+                }
+                .frame(width: 200, height: 200)
+                
                 List {
-                    AsyncImage(url: URL(string: pokemonDetails.sprites.front_default), scale: 1) { image in
-                        image
-                            .resizable()
-                            .scaledToFit()
-                    } placeholder: {
-                        ProgressView()
-                    }
-                    .frame(width: 200, height: 200)
-                    
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
                             Text("ID: \(pokemonDetails.id)")

@@ -60,6 +60,5 @@ final class PokemonViewModel: ObservableObject {
             self.hasError = ErrorType.notDecodable
         }
     }
-    
 }
 
